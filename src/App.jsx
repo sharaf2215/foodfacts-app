@@ -12,7 +12,7 @@ function App() {
     setHasSearched(true)
 
     try {
-      const url = `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&json=1&page_size=10`
+      const url = `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&json=1`
       const response = await fetch(url)
       const data = await response.json()
 
