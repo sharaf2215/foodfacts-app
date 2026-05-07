@@ -1,3 +1,9 @@
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
+import CardMedia from '@mui/material/CardMedia'
+import CardActionArea from '@mui/material/CardActionArea'
+import Typography from '@mui/material/Typography'
+import Chip from '@mui/material/Chip'
 import { useNavigate } from 'react-router-dom'
 
 function FoodCard({ product }) {
@@ -6,21 +12,39 @@ function FoodCard({ product }) {
   const displayName = product_name || product_name_en || generic_name || 'Unknown Product'
 
   const handleClick = () => {
-    navigate(`/product/${code}`)
+    navigate(`/product/${code}`, { state: { product } })
   }
 
   return (
-    <div className="food-card" onClick={handleClick} style={{ cursor: 'pointer' }}>
-      {image_small_url ? <img src={image_small_url} alt={displayName} /> : <div>No Image Provided</div>}
-      <h2>{displayName}</h2>
-      {brands && <h3>{brands}</h3>}
-      <div className="nutrients">
-        <p>Calories: {nutriments?.['energy-kcal_100g'] || 'N/A'} kcal</p>
-        <p>Protein: {nutriments?.proteins_100g || 'N/A'} g</p>
-        <p>Carbohydrates: {nutriments?.carbohydrates_100g || 'N/A'} g</p>
-        <p>Fat: {nutriments?.fat_100g || 'N/A'} g</p>
-      </div>
-    </div>
+    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <CardActionArea onClick={handleClick} sx={{ flexGrow: 1 }}>
+        {image_small_url && (
+          <CardMedia
+            component="img"
+            height="140"
+            image={image_small_url}
+            alt={displayName}
+            sx={{ objectFit: 'contain', p: 1 }}
+          />
+        )}
+        <CardContent>
+          <Typography variant="h6" gutterBottom>
+            {displayName}
+          </Typography>
+          <Typography variant="body2" color="text.secondary" gutterBottom>
+            {brands || 'Unknown Brand'}
+          </Typography>
+          {nutriments?.['energy-kcal_100g'] && (
+            <Chip
+              label={`${Math.round(nutriments['energy-kcal_100g'])} kcal / 100g`}
+              size="small"
+              color="primary"
+              variant="outlined"
+            />
+          )}
+        </CardContent>
+      </CardActionArea>
+    </Card>
   )
 }
 
